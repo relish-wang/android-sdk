@@ -1,0 +1,39 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.smart.android.uploadqueue.sample"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation project(":uploadqueue")
+    implementation "com.smart.android:imagepickerlib:0.0.9"
+
+    implementation "com.github.chrisbanes:PhotoView:2.1.4"
+
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+
+
+    implementation 'com.qiniu:qiniu-android-sdk:7.3.15'
+
+
+}
