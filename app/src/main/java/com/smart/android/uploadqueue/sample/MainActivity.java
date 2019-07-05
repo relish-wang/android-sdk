@@ -76,11 +76,16 @@ public class MainActivity extends AppCompatActivity {
         mRvPending = findViewById(R.id.rv_uploading);
         mRvPending.setAdapter(mPendingAdapter);
 
-        manager = UploadManager.getInstance(2, "pre.api.iotrack.cn/organize/app/", (pending, completed) -> {
-            mPendingFiles = pending;
-            mPendingAdapter.notifyDataSetChanged();
+        manager = UploadManager.getInstance(2, "http://pre.api.iotrack.cn/organize/app/", (pending, completed) -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    mPendingFiles = pending;
+                    mPendingAdapter.notifyDataSetChanged();
+                }
+            });
         });
-        manager.start();
     }
 
     PicturePicker picturePicker;
@@ -90,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         picturePicker = new PicturePicker();
         picturePicker.setOnTakeFinishListener(images -> {
             Toast.makeText(MainActivity.this, Arrays.toString(images.toArray()), Toast.LENGTH_SHORT).show();
-
+            manager.add(images);
         });
         picturePicker.openGallery(this, false);
     }

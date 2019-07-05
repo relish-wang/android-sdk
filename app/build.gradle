@@ -25,13 +25,14 @@ android {
 
 dependencies {
 
+    implementation 'com.android.support:design:27.1.1'
+
     implementation project(":uploadqueue")
     implementation "com.smart.android:imagepickerlib:0.0.9"
 
     implementation "com.github.chrisbanes:PhotoView:2.1.4"
 
     implementation 'com.github.bumptech.glide:glide:4.9.0'
-
 
     implementation 'com.qiniu:qiniu-android-sdk:7.3.15'
 

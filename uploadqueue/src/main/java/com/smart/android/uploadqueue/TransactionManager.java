@@ -47,6 +47,7 @@ class TransactionManager {
         } else {
             list.add(traffic);
         }
+        start();
     }
 
     void add(List<FileModel> traffic) {
@@ -66,6 +67,7 @@ class TransactionManager {
                 }
             }
         }
+        start();
     }
 
     // AnyThread
