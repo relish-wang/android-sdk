@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:text="批量上传" />
 
+    <include layout="@layout/item_pending" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

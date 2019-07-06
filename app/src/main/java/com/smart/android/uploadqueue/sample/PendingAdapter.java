@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.smart.android.uploadqueue.FileModel;
-import com.smart.android.uploadqueue.FileStatus;
+import com.zhihan.android.upload.bean.FileModel;
+import com.zhihan.android.upload.bean.FileStatus;
 
 import java.util.List;
 

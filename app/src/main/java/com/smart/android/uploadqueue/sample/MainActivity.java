@@ -13,15 +13,17 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.smart.android.imagepickerlib.ImagePicker;
 import com.smart.android.imagepickerlib.loader.ImageLoader;
 import com.smart.android.imagepickerlib.view.CropImageView;
-import com.smart.android.uploadqueue.FileModel;
-import com.smart.android.uploadqueue.UploadManager;
+import com.zhihan.android.upload.UploadSdk;
+import com.zhihan.android.upload.bean.FileModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,14 +36,26 @@ public class MainActivity extends AppCompatActivity {
     PendingAdapter mPendingAdapter;
     RecyclerView mCompleted;
 
-    UploadManager manager;
+
+    ImageView iv;
+    TextView tvName;
+    TextView tvProgress;
+    TextView tvSpeed;
+    TextView tvSize;
+    Button btnDel;
+    Button btnPause;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        UploadSdk.init(getApplication(), true);
+
         initImagePicker();
         // http://pre.api.iotrack.cn/organize/app/
+        // http://pre.api.iotrack.cn/organize/app/qiniu/uptoken
 
         findViewById(R.id.pick).setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(MainActivity.this,
@@ -53,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                         Manifest.permission.CAMERA}, 0x123);
             } else {
                 pick();
+
             }
         });
 
@@ -61,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDelete(View v, FileModel model, int position) {
                 // TODO 删除
+//                FileRecorder
             }
 
             @Override
@@ -76,16 +92,18 @@ public class MainActivity extends AppCompatActivity {
         mRvPending = findViewById(R.id.rv_uploading);
         mRvPending.setAdapter(mPendingAdapter);
 
-        manager = UploadManager.getInstance(2, "http://pre.api.iotrack.cn/organize/app/", (pending, completed) -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+        initTestItem();
+    }
 
-                    mPendingFiles = pending;
-                    mPendingAdapter.notifyDataSetChanged();
-                }
-            });
-        });
+    private void initTestItem() {
+        iv = findViewById(R.id.iv);
+        tvName = findViewById(R.id.tv_name);
+        tvProgress = findViewById(R.id.tv_progress);
+        tvSpeed = findViewById(R.id.tv_speed);
+        tvSize = findViewById(R.id.tv_size);
+        btnDel = findViewById(R.id.btn_del);
+        btnPause = findViewById(R.id.btn_pause_or_resume);
+
     }
 
     PicturePicker picturePicker;
@@ -95,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         picturePicker = new PicturePicker();
         picturePicker.setOnTakeFinishListener(images -> {
             Toast.makeText(MainActivity.this, Arrays.toString(images.toArray()), Toast.LENGTH_SHORT).show();
-            manager.add(images);
+            // TODO 执行上传任务
         });
         picturePicker.openGallery(this, false);
     }
