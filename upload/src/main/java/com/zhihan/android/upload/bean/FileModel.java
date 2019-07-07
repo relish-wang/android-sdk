@@ -18,13 +18,13 @@ public class FileModel /*implements Parcelable*/ {
     /** 文件大小(单位: B) */
     private long fileSize;
 
-    /** 上传进度(单位: B/s) */
+    /** 上传进度(0~1之间, 例: 0.78) */
     private double progress;
 
     /** 上传速度(单位: B/s) */
     private double speed;
 
-    /** 文件状态(等待中, 上传中, 上传失败, 上传完成) */
+    /** 文件状态(等待中, 上传中, 暂停中, 上传失败, 上传完成) */
     @FileStatus
     private int status;
 
@@ -34,8 +34,8 @@ public class FileModel /*implements Parcelable*/ {
     /** 网络地址(上传成功后才有) */
     private String url;
 
-    /** 开始上传的时间戳 */
-    private long startTime;
+    /** 手动操作的时间戳(也可用于排序), 比如: 选取文件上传、暂停、继续上传等操作都会更新这个字段 */
+    private long operationTime;
 
 
     public static FileModel newLocal(String localPath) {
@@ -115,11 +115,17 @@ public class FileModel /*implements Parcelable*/ {
         this.url = url;
     }
 
-    public long getStartTime() {
-        return startTime;
+    public long getOperationTime() {
+        return operationTime;
     }
 
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
+    public void setOperationTime(long operationTime) {
+        this.operationTime = operationTime;
     }
+
+    /*
+    TODO 默认排序规则:
+    1 上传状态排序: 上传中->等待上传->暂停中->上传失败
+    2 时间戳排序(operationTime): 越早(小)越前
+     */
 }

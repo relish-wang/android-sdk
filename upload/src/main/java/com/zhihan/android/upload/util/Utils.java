@@ -18,7 +18,7 @@ public final class Utils {
      * @param localPath 文件的本地地址
      * @return 不含路径的文件名
      */
-    static String getFileSimpleName(@NonNull String localPath) {
+    public static String getFileSimpleName(@NonNull String localPath) {
         if (TextUtils.isEmpty(localPath)) return localPath;
         final int lastIndexOfPathSeparator = localPath.lastIndexOf("/");
         if (lastIndexOfPathSeparator == -1 // 没找到
@@ -34,7 +34,7 @@ public final class Utils {
      * @param localPath 文件的本地地址
      * @return 文件大小
      */
-    static long getFileSize(@NonNull String localPath) {
+    public static long getFileSize(@NonNull String localPath) {
         if (TextUtils.isEmpty(localPath)) return 0;
         File file = new File(localPath);
         if (!file.exists()) return 0;
