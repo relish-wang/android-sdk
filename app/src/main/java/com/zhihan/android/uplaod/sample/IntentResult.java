@@ -1,4 +1,4 @@
-package com.smart.android.uploadqueue.sample;
+package com.zhihan.android.uplaod.sample;
 
 /**
  * Created by Hyu on 15/10/16.

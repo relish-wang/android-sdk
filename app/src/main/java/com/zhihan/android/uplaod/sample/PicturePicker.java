@@ -1,4 +1,4 @@
-package com.smart.android.uploadqueue.sample;
+package com.zhihan.android.uplaod.sample;
 
 import android.Manifest;
 import android.app.Activity;

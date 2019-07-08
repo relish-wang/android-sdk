@@ -1,7 +1,8 @@
-package com.zhihan.android.upload.bean;
+package com.zhihan.android.upload;
 
-import com.smart.android.utils.MD5;
-import com.zhihan.android.upload.util.Utils;
+import android.support.annotation.NonNull;
+
+import com.google.gson.Gson;
 
 /**
  * @author relish <a href="mailto:relish.wang@gmail.com">Contact me.</a>
@@ -47,7 +48,8 @@ public class FileModel /*implements Parcelable*/ {
         model.status = FileStatus.PENDING;
         model.localPath = localPath;
         model.url = "";
-        model.key = MD5.toMD5(localPath);
+        model.key = Utils.toMD5(localPath);
+        model.operationTime = System.currentTimeMillis();
         return model;
     }
 
@@ -121,6 +123,12 @@ public class FileModel /*implements Parcelable*/ {
 
     public void setOperationTime(long operationTime) {
         this.operationTime = operationTime;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 
     /*

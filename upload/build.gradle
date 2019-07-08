@@ -24,15 +24,9 @@ android {
 }
 
 dependencies {
-
-
     implementation 'com.android.support:design:27.1.1'
 
     implementation 'com.qiniu:qiniu-android-sdk:7.3.15'
-
-    implementation 'com.smart.android:net:0.1.18'
-
-    implementation 'com.smart.android:utils:0.0.13'
 
     implementation 'org.greenrobot:eventbus:3.1.1'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'

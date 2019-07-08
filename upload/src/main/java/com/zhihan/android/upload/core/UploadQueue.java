@@ -1,4 +1,4 @@
-package com.zhihan.android.upload;
+package com.zhihan.android.upload.core;
 
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -9,8 +9,17 @@ import java.util.concurrent.LinkedBlockingDeque;
  */
 public interface UploadQueue<T> {
 
+    /**
+     * 任务入队
+     * @param t
+     * @return
+     */
     boolean enqueue(T t);
 
+    /**
+     * 任务出队
+     * @return
+     */
     T dequeue();
 
 }

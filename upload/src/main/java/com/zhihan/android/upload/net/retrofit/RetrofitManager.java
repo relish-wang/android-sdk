@@ -127,7 +127,7 @@ public class RetrofitManager {
                     throw new IllegalArgumentException("checkServerTrusted:x509Certificate array is null");
                 }
                 if (chain.length <= 0) {
-                    throw new IllegalArgumentException("checkServerTrusted: X509Certificate is empty");
+                    throw new IllegalArgumentException("checkServerTrusted: X509Certificate is clear");
                 }
             }
 

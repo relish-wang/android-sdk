@@ -1,1 +1,1 @@
-include ':app', ':upload'
+include ':app', ':upload', ':QiniuUploadDemo'

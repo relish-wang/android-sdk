@@ -1,4 +1,4 @@
-package com.zhihan.android.upload.util;
+package com.zhihan.android.upload;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -23,7 +23,7 @@ public class ThreadPool {
     public ThreadPool(int count) {
         mExecutor = new ThreadPoolExecutor(
                 count,
-                count,
+                6,
                 30,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(),
@@ -67,5 +67,9 @@ public class ThreadPool {
                 }
             }
         }
+    }
+
+    public ThreadPoolExecutor getExecutor() {
+        return mExecutor;
     }
 }

@@ -15,8 +15,8 @@ public class UploadSdkConfig {
 
     public final class Editor {
 
-        public Editor setBaseUrl(String payAlias) {
-            mBaseUrl = payAlias == null ? "" : payAlias;
+        public Editor setBaseUrl(String baseUrl) {
+            mBaseUrl = baseUrl == null ? "" : baseUrl;
             return this;
         }
 
@@ -29,6 +29,11 @@ public class UploadSdkConfig {
             mThreadCount = threadCount;
             return this;
         }
+
+        public Editor setOnDataUpdateListener(OnDataUpdateListener l) {
+            mOnDataUpdateListener = l;
+            return this;
+        }
     }
 
     // 必填
@@ -37,6 +42,7 @@ public class UploadSdkConfig {
     // 非必填
     private String mBaseUrl = "http://pre.api.iotrack.cn/";
     private int mThreadCount = 2;// 默认2个任务
+    private OnDataUpdateListener mOnDataUpdateListener;
 
     /* package */ UploadSdkConfig() {
     }
@@ -49,12 +55,16 @@ public class UploadSdkConfig {
         return mThreadCount;
     }
 
-    public Application getApp() {
+    public Application getContext() {
         return mApp;
     }
 
     public boolean isDebug() {
         return mIsDebug;
+    }
+
+    public OnDataUpdateListener getOnDataUpdateListener() {
+        return mOnDataUpdateListener;
     }
 
     /* package */ Editor editor() {
