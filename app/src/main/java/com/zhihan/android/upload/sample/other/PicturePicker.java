@@ -1,4 +1,4 @@
-package com.zhihan.android.uplaod.sample;
+package com.zhihan.android.upload.sample.other;
 
 import android.Manifest;
 import android.app.Activity;

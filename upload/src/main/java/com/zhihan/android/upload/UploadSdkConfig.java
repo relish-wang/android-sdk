@@ -1,22 +1,26 @@
 package com.zhihan.android.upload;
 
-import android.app.Application;
+import android.text.TextUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @author relish <a href="mailto:relish.wang@gmail.com">Contact me.</a>
+ * @author wangxin
  * @since 20190706
  */
 public class UploadSdkConfig {
 
-    public UploadSdkConfig(Application app, boolean isDebug) {
-        this.mApp = app;
+    public UploadSdkConfig(boolean isDebug) {
         mIsDebug = isDebug;
     }
 
     public final class Editor {
 
         public Editor setBaseUrl(String baseUrl) {
-            mBaseUrl = baseUrl == null ? "" : baseUrl;
+            if (TextUtils.isEmpty(baseUrl)) {
+                mBaseUrl = baseUrl;
+            }
             return this;
         }
 
@@ -30,24 +34,35 @@ public class UploadSdkConfig {
             return this;
         }
 
-        public Editor setOnDataUpdateListener(OnDataUpdateListener l) {
-            mOnDataUpdateListener = l;
+        public Editor setSeparator(Separator separator) {
+            mSeparator = separator;
+            return this;
+        }
+
+        public Editor setFileComparator(FileComparator comparator) {
+            mFileComparator = comparator;
             return this;
         }
     }
 
+    private static final String DEFAULT_DEV_BASE_URL = "http://pre.api.ececloud.cn/";
+
     // 必填
-    private Application mApp;
-    private boolean mIsDebug;
+    private boolean mIsDebug = false;
     // 非必填
-    private String mBaseUrl = "http://pre.api.iotrack.cn/";
+    private String mBaseUrl = "http://api.ececloud.cn/";
     private int mThreadCount = 2;// 默认2个任务
-    private OnDataUpdateListener mOnDataUpdateListener;
+    private List<OnDataUpdateListener> mOnDataUpdateListeners;
+    private Separator mSeparator = Separator.DEFAULT;
+    private FileComparator mFileComparator = FileComparator.DEFAULT;
 
     /* package */ UploadSdkConfig() {
     }
 
     public String getBaseUrl() {
+        if (mIsDebug) {
+            return DEFAULT_DEV_BASE_URL;
+        }
         return mBaseUrl;
     }
 
@@ -55,16 +70,31 @@ public class UploadSdkConfig {
         return mThreadCount;
     }
 
-    public Application getContext() {
-        return mApp;
-    }
-
     public boolean isDebug() {
         return mIsDebug;
     }
 
-    public OnDataUpdateListener getOnDataUpdateListener() {
-        return mOnDataUpdateListener;
+    void addOnDataUpdateListener(OnDataUpdateListener l) {
+        if (mOnDataUpdateListeners == null) {
+            mOnDataUpdateListeners = new ArrayList<>();
+        }
+        mOnDataUpdateListeners.add(l);
+    }
+
+    public void removeOnDataUpdateListener(OnDataUpdateListener l) {
+        mOnDataUpdateListeners.remove(l);
+    }
+
+    public List<OnDataUpdateListener> getOnDataUpdateListeners() {
+        return mOnDataUpdateListeners;
+    }
+
+    public Separator getSeparator() {
+        return mSeparator;
+    }
+
+    public FileComparator getFileComparator() {
+        return mFileComparator;
     }
 
     /* package */ Editor editor() {

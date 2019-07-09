@@ -1,4 +1,4 @@
-package com.zhihan.android.uplaod.sample;
+package com.zhihan.android.upload.sample.other;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import com.smart.android.imagepickerlib.loader.ImageLoader;
 import com.smart.android.imagepickerlib.view.CropImageView;
 
 /**
- * @author relish <a href="mailto:relish.wang@gmail.com">Contact me.</a>
+ * @author wangxin
  * @since 20190708
  */
 public class PickerActivity extends AppCompatActivity {

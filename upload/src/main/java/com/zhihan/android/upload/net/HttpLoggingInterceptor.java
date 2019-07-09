@@ -1,4 +1,4 @@
-package com.zhihan.android.upload.net.retrofit;
+package com.zhihan.android.upload.net;
 
 import android.util.Log;
 
@@ -32,7 +32,7 @@ import okio.BufferedSource;
 
 /**
  * @author wangxin
- * @since 20190721
+ * @since 20190621
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class HttpLoggingInterceptor implements Interceptor {
@@ -207,6 +207,9 @@ public final class HttpLoggingInterceptor implements Interceptor {
      * Returns true if the response must have a (possibly 0-length) body. See RFC 2616 section 4.3.
      */
     private static boolean hasBody(Response response) {
+        if (response.body() == null) {
+            return false;
+        }
         // HEAD requests never yield a body regardless of the response headers.
         if ("HEAD".equals(response.request().method())) {
             return false;
@@ -222,7 +225,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
         // If the Content-Length or Transfer-Encoding headers disagree with the
         // response code, the response is malformed. For best compatibility, we
         // honor the headers.
-        //noinspection RedundantIfStatement: for more clear logic
+        //noinspection RedundantIfStatement,ConstantConditions: for more clear logic
         if (Long.parseLong(response.header("Content-Length", "-1")) != -1
                 || "chunked".equalsIgnoreCase(response.header("Transfer-Encoding"))) {
             return true;
@@ -269,6 +272,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
 
         String requestBodyString;
         try {
+            assert charset != null;
             requestBodyString = buffer.readString(charset);
         } catch (Throwable t) {
             return "<error occur in reading request body: " + t + "...>";
@@ -291,6 +295,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
         if (!hasBody(response)) return "<no response body...>";
         if (maxBytes <= 0) return "<set level as Level.BODY to watch...>";
 
+        //noinspection ConstantConditions
         BufferedSource source = responseBody.source();
         source.request(maxBytes == Integer.MAX_VALUE ? Integer.MAX_VALUE : (maxBytes + 1));
         if (source.buffer().size() > maxBytes)
@@ -305,6 +310,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
         Buffer buffer = source.buffer();
         if (!bodyEncoded(response.headers())) {
             try {
+                assert charset != null;
                 return buffer.clone().readString(charset);
             } catch (Throwable t) {
                 return "<error occur in reading response body: " + t + "...>";
@@ -315,6 +321,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
         if ("gzip".equalsIgnoreCase(contentEncoding)) {
             final Buffer encodedBuffer = buffer.clone();
             try {
+                assert charset != null;
                 return copy(new GZIPInputStream(encodedBuffer.inputStream()),
                         new ByteArrayOutputStream((int) encodedBuffer.size()))
                         .toString(charset.name());
@@ -347,6 +354,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
         return mLevel;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public HttpLoggingInterceptor setLevel(Level level) {
         if (level == null) throw new NullPointerException("level == null. Use Level.NONE instead.");
         mLevel = level;
@@ -461,7 +469,12 @@ public final class HttpLoggingInterceptor implements Interceptor {
             }
         }
 
-        private static int fillText(StringBuilder sb, String tableChars, String[] texts, int[] ems) {
+        @SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
+        private static int fillText(
+                StringBuilder sb,
+                String tableChars,
+                String[] texts,
+                int[] ems) {
             if (tableChars.length() != 4) throw new IllegalArgumentException("example: ╟─┼╢");
             if (texts.length > ems.length) throw new IllegalArgumentException();
             final int originalSize = sb.length();

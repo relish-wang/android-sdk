@@ -14,3 +14,68 @@ reqBuilder.header(Content-Length, 0);
 reqBuilder.header(Host, pre.api.iotrack.cn);
 reqBuilder.header(Connection, Keep-Alive);
 reqBuilder.header(Accept-Encoding, gzip);
+
+
+
+
+            @SuppressWarnings("unused")
+            private synchronized boolean upload() {
+                final String key = model.getKey();
+                ResponseInfo responseInfo = mManager.syncPut(
+                        model.getLocalPath(),
+                        key,
+                        mToken,
+                        new UploadOptions(
+                                null/*map*/,
+                                null,
+                                false,
+                                (key13, percent) -> {
+                                    // 上传进度更新
+                                    model.setProgress(percent);
+                                    long operationTime = model.getOperationTime();
+                                    long delta = System.currentTimeMillis() - operationTime;
+                                    // B / s
+                                    double v = model.getFileSize()
+                                            * (percent - model.getOperationTimeProcess())
+                                            / (delta / 1000.0);
+                                    model.setSpeed(v);
+                                    Utils.Log.d(
+                                            "progress = " + percent + " " +
+                                                    "time = " + (delta / 1000) + " " +
+                                                    "speed = " + v + " B/s");
+                                    updateFileModel(model);
+                                }, () -> {
+                            boolean paused = isPaused(key);
+                            if (paused) {
+                                model.setStatus(FileStatus.PAUSED);
+                                updateFileModel(model);
+                            }
+                            return paused || isRemoved(key);
+                        }));
+                if (responseInfo.statusCode == ResponseInfo.InvalidToken) {
+                    if (isRetry) return false;
+                    fetchToken();
+                    isRetry = true;
+                    return upload();
+                }
+                if (responseInfo.isNetworkBroken()) {
+                    model.setStatus(FileStatus.FAILED);
+                    updateFileModel(model);
+                    return true;
+                } else if (responseInfo.isOK()) {
+                    String path;
+                    try {
+                        path = responseInfo.response.getString("key");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        model.setStatus(FileStatus.FAILED);
+                        updateFileModel(model);
+                        return false;
+                    }
+                    model.setUrl(String.format("https://oss.zhihanyun.com/%s", path));
+                    model.setStatus(FileStatus.COMPLETED);
+                    updateFileModel(model);
+                    return true;
+                }
+                return false;
+            }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author relish <a href="mailto:relish.wang@gmail.com">Contact me.</a>
+ * @author wangxin
  * @since 20190705
  */
 public class UploadManager {
@@ -29,7 +29,6 @@ public class UploadManager {
             sManager.baseUrl = baseUrl;
         }
         return sManager;
-
     }
 
 
@@ -54,7 +53,6 @@ public class UploadManager {
     public void add(String filePath) {
         mTransactionManager.add(FileModel.newLocal(filePath));
     }
-
 
     public void start() {
         mTransactionManager.start();

@@ -6,10 +6,12 @@ import android.text.TextUtils;
 import java.io.File;
 
 /**
- * @author relish <a href="mailto:relish.wang@gmail.com">Contact me.</a>
+ * 工具类
+ *
+ * @author wangxin
  * @since 20190705
  */
-public final class Utils {
+final class Utils {
 
 
     /**
@@ -18,7 +20,7 @@ public final class Utils {
      * @param localPath 文件的本地地址
      * @return 不含路径的文件名
      */
-    public static String getFileSimpleName(@NonNull String localPath) {
+    static String getFileSimpleName(@NonNull String localPath) {
         if (TextUtils.isEmpty(localPath)) return localPath;
         final int lastIndexOfPathSeparator = localPath.lastIndexOf("/");
         if (lastIndexOfPathSeparator == -1 // 没找到
@@ -34,7 +36,7 @@ public final class Utils {
      * @param localPath 文件的本地地址
      * @return 文件大小
      */
-    public static long getFileSize(@NonNull String localPath) {
+    static long getFileSize(@NonNull String localPath) {
         if (TextUtils.isEmpty(localPath)) return 0;
         File file = new File(localPath);
         if (!file.exists()) return 0;
@@ -48,7 +50,7 @@ public final class Utils {
      * @param s 源字符串
      * @return MD5值
      */
-    public static String toMD5(String s) {
+    static String toMD5(String s) {
         MD5 md5 = new MD5();
         return md5.getMD5ofStr(s);
     }
@@ -289,54 +291,59 @@ public final class Utils {
     }
 
     /**
-     * @author relish <a href="mailto:relish.wang@gmail.com">Contact me.</a>
+     * @author wangxin
      * @since 20190708
      */
-    public static final class Log {
+    static final class Log {
 
         private static final String TAG = "[UploadSdk]";
 
-        public static void v(String tag) {
+        @SuppressWarnings("unused")
+        static void v(String tag) {
             v(TAG, tag);
         }
 
-        public static void d(String tag) {
+        static void d(String tag) {
             d(TAG, tag);
         }
 
-        public static void i(String tag) {
+        @SuppressWarnings("unused")
+        static void i(String tag) {
             i(TAG, tag);
         }
 
-        public static void w(String tag) {
+        @SuppressWarnings("unused")
+        static void w(String tag) {
             w(TAG, tag);
         }
 
-        public static void e(String tag) {
+        static void e(String tag) {
             e(TAG, tag);
         }
 
-        public static void v(String tag, String message) {
+        @SuppressWarnings("SameParameterValue")
+        static void v(String tag, String message) {
             if (!UploadSdk.getConfig().isDebug()) return;
             android.util.Log.v(tag, message);
         }
 
-        public static void d(String tag, String message) {
+        static void d(String tag, String message) {
             if (!UploadSdk.getConfig().isDebug()) return;
             android.util.Log.d(tag, message);
         }
 
-        public static void i(String tag, String message) {
+        static void i(String tag, String message) {
             if (!UploadSdk.getConfig().isDebug()) return;
             android.util.Log.v(tag, message);
         }
 
-        public static void w(String tag, String message) {
+        @SuppressWarnings("SameParameterValue")
+        static void w(String tag, String message) {
             if (!UploadSdk.getConfig().isDebug()) return;
             android.util.Log.w(tag, message);
         }
 
-        public static void e(String tag, String message) {
+        static void e(String tag, String message) {
             if (!UploadSdk.getConfig().isDebug()) return;
             android.util.Log.e(tag, message);
         }

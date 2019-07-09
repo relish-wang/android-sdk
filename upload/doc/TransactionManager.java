@@ -86,7 +86,7 @@ class TransactionManager {
         if (!flag) return;
 
         try {
-            // TODO 如何监听上传完成或删除的事件再添加新的任务进入工作线程
+            // TO DO 如何监听上传完成或删除的事件再添加新的任务进入工作线程
             //noinspection unchecked
 //            listener.onTransaction(list); // 异步？
             for (final FileModel model : list) {
@@ -158,7 +158,7 @@ class TransactionManager {
                 });
     }
 
-    // TODO 暂停/继续上传/删除操作
+    // TO DO 暂停/继续上传/删除操作
     synchronized void notify(String key, FileModel fileModel) {
         // 某个文件上传完毕 或 被暂停 或 上传失败
         list.add(pendingList.remove(0));

@@ -1,14 +1,16 @@
 package com.zhihan.android.upload;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 
 /**
- * @author relish <a href="mailto:relish.wang@gmail.com">Contact me.</a>
+ * @author wangxin
  * @since 20190705
  */
-public class FileModel /*implements Parcelable*/ {
+public class FileModel implements Parcelable {
 
     /** 类似ID的作用, 用于唯一标示一个文件 */
     private String key;
@@ -38,8 +40,58 @@ public class FileModel /*implements Parcelable*/ {
     /** 手动操作的时间戳(也可用于排序), 比如: 选取文件上传、暂停、继续上传等操作都会更新这个字段 */
     private long operationTime;
 
+    /** 手动操作的时间戳时的上传进度 */
+    private double operationTimeProcess = 0;
 
-    public static FileModel newLocal(String localPath) {
+
+    protected FileModel(Parcel in) {
+        key = in.readString();
+        fileName = in.readString();
+        fileSize = in.readLong();
+        progress = in.readDouble();
+        speed = in.readDouble();
+        status = in.readInt();
+        localPath = in.readString();
+        url = in.readString();
+        operationTime = in.readLong();
+        operationTimeProcess = in.readDouble();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(key);
+        dest.writeString(fileName);
+        dest.writeLong(fileSize);
+        dest.writeDouble(progress);
+        dest.writeDouble(speed);
+        dest.writeInt(status);
+        dest.writeString(localPath);
+        dest.writeString(url);
+        dest.writeLong(operationTime);
+        dest.writeDouble(operationTimeProcess);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<FileModel> CREATOR = new Creator<FileModel>() {
+        @Override
+        public FileModel createFromParcel(Parcel in) {
+            return new FileModel(in);
+        }
+
+        @Override
+        public FileModel[] newArray(int size) {
+            return new FileModel[size];
+        }
+    };
+
+    public FileModel() {
+    }
+
+    static FileModel newLocal(String localPath) {
         FileModel model = new FileModel();
         model.fileName = Utils.getFileSimpleName(localPath);
         model.fileSize = Utils.getFileSize(localPath);
@@ -65,6 +117,7 @@ public class FileModel /*implements Parcelable*/ {
         return speed;
     }
 
+    @FileStatus
     public int getStatus() {
         return status;
     }
@@ -81,48 +134,38 @@ public class FileModel /*implements Parcelable*/ {
         return progress;
     }
 
-    public String getKey() {
+    String getKey() {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public void setProgress(double progress) {
+    void setProgress(double progress) {
         this.progress = progress;
     }
 
-    public void setSpeed(double speed) {
+    void setSpeed(double speed) {
         this.speed = speed;
     }
 
-    public void setStatus(int status) {
+    void setStatus(int status) {
         this.status = status;
     }
 
-    public void setLocalPath(String localPath) {
-        this.localPath = localPath;
-    }
-
-    public void setUrl(String url) {
+    void setUrl(String url) {
         this.url = url;
+        setOperationTime(System.currentTimeMillis());
     }
 
-    public long getOperationTime() {
+    long getOperationTime() {
         return operationTime;
     }
 
-    public void setOperationTime(long operationTime) {
+    void setOperationTime(long operationTime) {
         this.operationTime = operationTime;
+        this.operationTimeProcess = progress;
+    }
+
+    double getOperationTimeProcess() {
+        return operationTimeProcess;
     }
 
     @NonNull
@@ -130,10 +173,4 @@ public class FileModel /*implements Parcelable*/ {
     public String toString() {
         return new Gson().toJson(this);
     }
-
-    /*
-    TODO 默认排序规则:
-    1 上传状态排序: 上传中->等待上传->暂停中->上传失败
-    2 时间戳排序(operationTime): 越早(小)越前
-     */
 }

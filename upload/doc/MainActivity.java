@@ -81,7 +81,6 @@ public class MainActivity extends Activity {
                         }
 
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     } finally {
                         try{
@@ -91,7 +90,6 @@ public class MainActivity extends Activity {
                         }
                     }
                 } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return path;
