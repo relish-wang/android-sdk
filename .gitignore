@@ -28,7 +28,5 @@ build/
 .DS_Store
 
 # Android Studio
-.idea/workspace.xml
-.idea/libraries
-.idea/kotlinc.xml
-.idea/caches/build_file_checksums.ser
+.idea/
+*.iml
